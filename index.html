@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureTech Lab - Account Verification</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    {% if not submitted %}
+      <div class="card">
+        <div class="logo">SECURETECH LAB</div>
+        <h1>Verify Your Account</h1>
+        <p class="subtitle">Please confirm your credentials to continue receiving IT updates.</p>
+        <form method="POST">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="jdoe" required>
+
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+
+          <button type="submit">Verify Account</button>
+        </form>
+      </div>
+    {% else %}
+      <div class="card awareness">
+        <div class="logo">SECURETECH LAB</div>
+        <h1>⚠ This Was a Phishing Simulation</h1>
+        <p>
+          This page was part of an internal security awareness exercise
+          run by SecureTech Lab's security team. No real credentials
+          were stored.
+        </p>
+        <p>
+          If this had been a real attack, your credentials could have
+          been compromised. Please review our phishing awareness
+          guidelines and report any suspicious emails to the security
+          team.
+        </p>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
