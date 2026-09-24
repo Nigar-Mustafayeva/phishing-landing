@@ -4,34 +4,36 @@ import logging
 
 app = Flask(__name__)
 
-# Basic logging so submissions show up in Render's log stream
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("phishing-sim")
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def index():
     """
-    Simulated internal-IT credential update page for SECURETECH LAB
-    phishing awareness exercise. GoPhish handles the real click/open
-    tracking; this route just logs form submissions for the exercise
-    report and shows the participant an "awareness" message afterward.
+    Simulated 'Account Verification Required' phishing landing page
+    for SECURETECH LAB awareness exercise. rid is a tracking id
+    (e.g. passed in via query string from a GoPhish campaign link).
     """
-    submitted = False
-    if request.method == "POST":
-        username = request.form.get("username", "")
-        # NOTE: For the training exercise, do NOT log real passwords.
-        # We only log that a submission happened + the username field,
-        # to avoid storing sensitive data even in a simulated context.
-        logger.info("Simulated credential submission from username field: %s", username)
-        submitted = True
+    rid = request.args.get("rid", "")
+    return render_template("login.html", rid=rid)
 
-    return render_template("index.html", submitted=submitted)
+
+@app.route("/submit", methods=["POST"])
+def submit():
+    """
+    Handles the simulated credential submission. We deliberately do
+    NOT log the password — only that a submission occurred, tied to
+    the tracking id, for exercise reporting purposes.
+    """
+    rid = request.form.get("rid", "unknown")
+    email = request.form.get("email", "")
+    logger.info("Simulated credential submission | rid=%s | email=%s", rid, email)
+    return render_template("trained.html")
 
 
 @app.route("/health")
 def health():
-    # Simple health check endpoint for Render
     return {"status": "ok"}, 200
 
 
